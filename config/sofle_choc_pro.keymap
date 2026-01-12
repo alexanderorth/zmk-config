@@ -103,9 +103,9 @@
 
             // ------------------------------------------------------------------------------------------------------------
             // | BTCLR | BT1  | BT2  | BT3  | BT4  | BT5  |          |      |      |      |      |      |      |
-            // |      | INS  | PSCR | K_MENU|      |      |          | PGDN | PGUP |      |  0   |      |      |
-            // |      | LALT | LCTL | LSHFT|      | CLCK |          | LEFT | DOWN |  UP  | RIGHT|  DEL | BKSPC |
-            // | REDO | UNDO | CUT  | COPY | PASTE| STUNL|     |     |      | PASTE| COPY | CUT  | UNDO | REDO |
+            // |   `   |  1   |  2   |  3   |  4   |  5   |          |  6   |  7   |  8   |  9   |  0   |      |
+            // |  F1   |  F2  |  F3  |  F4  |  F5  |  F6  |   <-     | LEFT | DOWN |  UP  | RIGHT|  DEL | BKSPC |
+            // |  F7   |  F8  |  F9  |  F10 |  F11 |  F12 |  UNLOCK  |      |      | PASTE| COPY | CUT  | UNDO | REDO |
             //              |      |      |      |      |      |      |      |      |      |      |      |
 
             bindings = <
@@ -116,6 +116,7 @@
                              &trans         &trans         &trans         &trans           &trans           &trans             &trans           &trans            &trans           &trans
             >;
         };
+
 
         adjust_layer {
             // ----------------------------------------------------------------------------------------------------------------------------
@@ -128,9 +129,9 @@
             display-name = "adjust";
             bindings = <
 &bt BT_CLR     &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4                          &none  &none  &none  &none  &none  &none
-&none          &none           &none           &none           &none           &none           &none                  &none  &none  &none  &none  &none
-&none          &none           &none           &none           &none           &none           &none                  &none  &none  &none  &none  &none
-&none          &none           &none           &none           &none           &none           &none                  &none  &none  &none  &none  &none  &none  &none  &none
+&none          &none           &none           &none           &none           &none                                &none                  &none  &none  &none  &none  &none
+&none          &none           &none           &none           &none           &none                                    &none                  &none  &none  &none  &none  &none
+&none          &none           &none           &none           &none           &none         &kp C_VOL_DN                      &kp C_VOL_UP  &none  &none  &none  &none  &none  &none  &none
                               &none           &none           &none           &none           &none           &none  &none  &none  &none  &none
             >;
         };
