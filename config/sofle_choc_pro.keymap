@@ -39,7 +39,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <28 27 26 25>;
         };
 
         hml_ring: hml_ring {
@@ -53,7 +52,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <28 27 26 25>;
         };
 
         hml: hml {
@@ -67,7 +65,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <28 27 26 25>;
         };
 
         hmr: hmr {
@@ -81,7 +78,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_ring: hmr_ring {
@@ -95,7 +91,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_pinky: hmr_pinky {
@@ -109,7 +104,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
     };
 
