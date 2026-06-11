@@ -22,15 +22,49 @@ jobs:
       - name: Prepare Lily58
         run: |
           mkdir -p lily58
-          cp firmware/lily58* lily58/
+          cp firmware/lily58_left-nice_nano_v2-zmk.uf2 lily58/Left.uf2
+          cp firmware/lily58_right-nice_nano_v2-zmk.uf2 lily58/Right.uf2
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58/Reset.uf2
           zip -r lily58_firmware.zip lily58
+
+      - name: Prepare Lily58 Dongle
+        run: |
+          mkdir -p lily58_dongle
+          # Dongle Firmware & Reset
+          cp firmware/lily58_dongle-nice_nano_v2-zmk.uf2 lily58_dongle/Dongle_Firmware.uf2
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle/Dongle_Reset.uf2
+          # Peripheral Firmware
+          cp firmware/lily58_left_peripheral.uf2 lily58_dongle/Left_Half_Peripheral.uf2
+          cp firmware/lily58_right_peripheral.uf2 lily58_dongle/Right_Half_Peripheral.uf2
+          # Peripheral Resets (Same board)
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle/Left_Half_Reset.uf2
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle/Right_Half_Reset.uf2
+          zip -r lily58_dongle_firmware.zip lily58_dongle
+
+      - name: Prepare Lily58 Dongle OLED
+        run: |
+          mkdir -p lily58_dongle_oled
+          # OLED Dongle Firmware & Reset
+          oled_fw=$(ls firmware/lily58_dongle_oled*.uf2 | head -n1)
+          cp "$oled_fw" lily58_dongle_oled/Dongle_OLED_Firmware.uf2
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle_oled/Dongle_Reset.uf2
+          # Peripheral Firmware
+          cp firmware/lily58_left_peripheral.uf2 lily58_dongle_oled/Left_Half_Peripheral.uf2
+          cp firmware/lily58_right_peripheral.uf2 lily58_dongle_oled/Right_Half_Peripheral.uf2
+          # Peripheral Resets (Same board)
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle_oled/Left_Half_Reset.uf2
+          cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58_dongle_oled/Right_Half_Reset.uf2
+          zip -r lily58_dongle_oled_firmware.zip lily58_dongle_oled
 
       - name: Prepare Sofle Standard
         run: |
           mkdir -p sofle_standard
-          cp firmware/nice_view_disp-sofle_choc_pro_left* sofle_standard/
-          cp firmware/nice_view_disp-sofle_choc_pro_right* sofle_standard/
-          cp firmware/settings_reset-sofle_choc_pro_* sofle_standard/
+          left_fw=$(ls firmware/nice_view_disp-sofle_choc_pro_left*.uf2 | head -n1)
+          right_fw=$(ls firmware/nice_view_disp-sofle_choc_pro_right*.uf2 | head -n1)
+          cp "$left_fw" sofle_standard/Left.uf2
+          cp "$right_fw" sofle_standard/Right.uf2
+          cp firmware/settings_reset-sofle_choc_pro_left-zmk.uf2 sofle_standard/Left_Reset.uf2
+          cp firmware/settings_reset-sofle_choc_pro_right-zmk.uf2 sofle_standard/Right_Reset.uf2
           zip -r sofle_standard_firmware.zip sofle_standard
 
       - name: Prepare Sofle Dongle
@@ -85,3 +119,15 @@ jobs:
         with:
           name: sofle_dongle_oled_firmware
           path: sofle_dongle_oled_firmware.zip
+
+      - name: Upload Lily58 Dongle
+        uses: actions/upload-artifact@v4
+        with:
+          name: lily58_dongle_firmware
+          path: lily58_dongle_firmware.zip
+
+      - name: Upload Lily58 Dongle OLED
+        uses: actions/upload-artifact@v4
+        with:
+          name: lily58_dongle_oled_firmware
+          path: lily58_dongle_oled_firmware.zip
