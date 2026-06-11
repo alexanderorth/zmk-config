@@ -76,7 +76,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_ring: hmr_ring {
@@ -90,7 +89,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_pinky: hmr_pinky {
@@ -104,7 +102,6 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
-            hold-trigger-key-positions = <31 32 33 34>;
         };
     };
 
