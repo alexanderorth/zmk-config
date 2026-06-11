@@ -37,6 +37,7 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <28 27 26 25>;
         };
 
         hml_ring: hml_ring {
@@ -45,37 +46,68 @@
             bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <280>;
+            tapping-term-ms = <260>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <28 27 26 25>;
         };
 
-        hml: hml {
+        hml_middle: hml_middle {
             compatible = "zmk,behavior-hold-tap";
-            label = "HML";
+            label = "HML_MIDDLE";
             bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <250>;
+            tapping-term-ms = <240>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <28 27 26 25>;
         };
 
-        hmr: hmr {
+        hml_index: hml_index {
             compatible = "zmk,behavior-hold-tap";
-            label = "HMR";
+            label = "HML_INDEX";
             bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <250>;
+            tapping-term-ms = <220>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <28 27 26 25>;
+        };
+
+        hmr_index: hmr_index {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HMR_INDEX";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <220>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <10>;
+            flavor = "balanced";
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <31 32 33 34>;
+        };
+
+        hmr_middle: hmr_middle {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HMR_MIDDLE";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <240>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <10>;
+            flavor = "balanced";
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_ring: hmr_ring {
@@ -84,11 +116,12 @@
             bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <280>;
+            tapping-term-ms = <260>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <31 32 33 34>;
         };
 
         hmr_pinky: hmr_pinky {
@@ -102,6 +135,7 @@
             require-prior-idle-ms = <10>;
             flavor = "balanced";
             hold-trigger-on-release;
+            hold-trigger-key-positions = <31 32 33 34>;
         };
     };
 
@@ -119,7 +153,7 @@
             bindings = <
 &kp GRAVE   &kp N1           &kp N2           &kp N3             &kp N4         &kp N5                             &kp N6     &kp N7         &kp N8        &kp N9           &kp N0                    &kp MINUS
 &kp TAB     &kp Q            &kp W            &kp E              &kp R          &kp T                              &kp Y      &kp U          &kp I         &kp O            &kp P                     &kp EQUAL
-&kp ESC     &hml_pinky LGUI A      &hml_ring LALT S      &hml LSHFT D       &hml LCTRL F   &kp G                              &kp H      &hmr RCTRL J   &hmr RSHFT K  &hmr_ring LALT L      &hmr_pinky RGUI SEMI            &kp SQT
+&kp ESC     &hml_pinky LGUI A      &hml_ring LALT S      &hml_middle LSHFT D       &hml_index LCTRL F   &kp G                              &kp H      &hmr_index RCTRL J   &hmr_middle RSHFT K  &hmr_ring LALT L      &hmr_pinky RGUI SEMI            &kp SQT
 &kp LSHFT   &kp Z            &kp X            &kp C              &kp V          &kp B      &kp LBKT      &kp RBKT  &kp N      &kp M          &kp COMMA     &kp DOT          &kp FSLH                  &kp BSLH
                              &kp LCTRL        &kp RALT           &mo LOWER      &kp SPACE                          &kp RET    &mo RAISE      &kp BSPC      &kp DEL
             >;
