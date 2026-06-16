@@ -205,16 +205,16 @@
         adjust_layer {
             // ----------------------------------------------------------------------------------------------------------------------------
             // | BTCLR | BT1  | BT2  | BT3  | BT4  | BT5  |          | NONE | NONE | NONE | NONE | NONE | NONE |
-            // | NONE  | NONE | NONE | NONE | NONE | NONE | NONE     | NONE | NONE | NONE | NONE | NONE | NONE |
-            // | NONE  | NONE | NONE | NONE | NONE | NONE | NONE     | NONE | NONE | NONE | NONE | NONE | NONE |
-            // | NONE  | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE |
+            // | EPTOG | HUD  | HUI  | SAD  | SAI  | EFF  |          | NONE | NONE | NONE | NONE | NONE | NONE |
+            // | TOGGL | BRD  | BRI  | NONE | NONE | NONE |          | NONE | NONE | NONE | NONE | NONE | NONE |
+            // | NONE  | NONE | NONE | NONE | NONE | NONE | VOL- | VOL+ | NONE | NONE | NONE | NONE | NONE | NONE |
             //              | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE | NONE |
 
             display-name = "adjust";
             bindings = <
 &bt BT_CLR     &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4                          &none  &none  &none  &none  &none  &none
-&none          &none           &none           &none           &none           &none                                &none                  &none  &none  &none  &none  &none
-&none          &none           &none           &none           &none           &none                                    &none                  &none  &none  &none  &none  &none
+&ext_power EP_TOG &rgb_ug RGB_HUD &rgb_ug RGB_HUI &rgb_ug RGB_SAD &rgb_ug RGB_SAI &rgb_ug RGB_EFF                         &none  &none  &none  &none  &none  &none
+&rgb_ug RGB_TOG   &rgb_ug RGB_BRD &rgb_ug RGB_BRI &none           &none           &none                                    &none  &none  &none  &none  &none  &none
 &none          &none           &none           &none           &none           &none         &kp C_VOL_DN                      &kp C_VOL_UP  &none  &none  &none  &none  &none  &none  &none
                               &none           &none           &none           &none           &none           &none  &none  &none  &none  &none
             >;
