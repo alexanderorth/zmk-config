@@ -23,9 +23,9 @@ include:
     snippet: studio-rpc-usb-uart
 
   - board: nice_nano_v2
-    shield: lily58_left nice_view_disp
+    shield: lily58_left lily58_nice_view nice_view_disp
   - board: nice_nano_v2
-    shield: lily58_right nice_view_disp
+    shield: lily58_right lily58_nice_view nice_view_disp
   - board: nice_nano_v2
     shield: lily58_right
     cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y -DCONFIG_ZMK_USB=y
@@ -62,4 +62,3 @@ include:
   - board: nice_nano_v2
     shield: lily58_right
     artifact-name: lily58_right_peripheral
-
