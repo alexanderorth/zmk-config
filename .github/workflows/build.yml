@@ -22,8 +22,10 @@ jobs:
       - name: Prepare Lily58
         run: |
           mkdir -p lily58
-          cp firmware/lily58_left-nice_nano_v2-zmk.uf2 lily58/Left.uf2
-          cp firmware/lily58_right-nice_nano_v2-zmk.uf2 lily58/Right.uf2
+          left_fw=$(ls firmware/nice_view_disp-lily58_left*.uf2 | head -n1)
+          right_fw=$(ls firmware/nice_view_disp-lily58_right*.uf2 | head -n1)
+          cp "$left_fw" lily58/Left.uf2
+          cp "$right_fw" lily58/Right.uf2
           cp firmware/settings_reset-nice_nano_v2-zmk.uf2 lily58/Reset.uf2
           zip -r lily58_firmware.zip lily58
 
