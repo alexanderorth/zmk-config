@@ -2,7 +2,17 @@ name: Build ZMK firmware
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
+  check-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet pyyaml
+      - name: Check build matrix
+        run: python3 scripts/check_build_matrix.py
+
   build:
+    needs: check-matrix
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
 
   organize:
