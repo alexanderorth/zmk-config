@@ -47,11 +47,14 @@ Build matrix is defined in `build.yaml`. The workflow:
 - Checks the matrix for unknown shields and duplicate artifact names
 - Builds all firmware variants
 - Organizes artifacts into downloadable zip files
-- Provides four firmware packages:
+- Provides seven firmware packages:
   - `lily58_firmware.zip` - Lily58 keyboard
   - `sofle_standard_firmware.zip` - Sofle Choc Pro with display
   - `sofle_dongle_firmware.zip` - Sofle Dongle
   - `sofle_dongle_oled_firmware.zip` - Sofle Dongle with OLED display
+  - `lily58_dongle_firmware.zip` - Lily58 Dongle
+  - `lily58_dongle_oled_firmware.zip` - Lily58 Dongle with OLED display
+  - `xiao_dongles_firmware.zip` - XIAO nRF52840 dongles for both keyboards
 
 ### Downloading Firmware
 

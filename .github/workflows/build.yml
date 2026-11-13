@@ -108,6 +108,18 @@ jobs:
           cp firmware/settings_reset-sofle_choc_pro_right-zmk.uf2 sofle_dongle_oled/Right_Half_Reset.uf2
           zip -r sofle_dongle_oled_firmware.zip sofle_dongle_oled
 
+      - name: Prepare XIAO Dongles
+        run: |
+          mkdir -p xiao_dongles
+          # Seeed XIAO nRF52840 dongles, no display
+          sofle_xiao=$(ls firmware/xiao_sofle_dongle-*.uf2 | head -n1)
+          lily58_xiao=$(ls firmware/xiao_lily58_dongle-*.uf2 | head -n1)
+          reset_xiao=$(ls firmware/settings_reset-seeeduino_xiao_ble-*.uf2 | head -n1)
+          cp "$sofle_xiao" xiao_dongles/Sofle_Dongle.uf2
+          cp "$lily58_xiao" xiao_dongles/Lily58_Dongle.uf2
+          cp "$reset_xiao" xiao_dongles/Dongle_Reset.uf2
+          zip -r xiao_dongles_firmware.zip xiao_dongles
+
       - name: Upload Lily58
         uses: actions/upload-artifact@v4
         with:
@@ -143,3 +155,9 @@ jobs:
         with:
           name: lily58_dongle_oled_firmware
           path: lily58_dongle_oled_firmware.zip
+
+      - name: Upload XIAO Dongles
+        uses: actions/upload-artifact@v4
+        with:
+          name: xiao_dongles_firmware
+          path: xiao_dongles_firmware.zip
