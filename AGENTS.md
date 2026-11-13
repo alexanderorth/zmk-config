@@ -19,10 +19,19 @@ External dependency: `zmk-dongle-display` from `lordorth/zmk-dongle-display` (pr
 ## Build System
 
 ### Config auto-discovery
-ZMK's build infrastructure for user config repos auto-includes `.conf` files by name matching:
-- `config/<board-name>.conf` — auto-included when building for that board (e.g., `config/sofle_choc_pro.conf` applies to both `sofle_choc_pro_left` and `sofle_choc_pro_right`)
-- `boards/shields/<shield>/<shield>.conf` — auto-included when building with that shield
-- `config/lily58_left.conf` and `config/lily58_right.conf` are per-half overrides (no shared `lily58.conf` auto-include for left/right — they're explicit)
+ZMK's build infrastructure for user config repos auto-includes `.conf` files from `ZMK_CONFIG`, see `zmk/app/keymap-module/modules/modules.cmake`. The matching is more permissive than "exact board or shield name":
+
+- Shield candidates are derived by splitting the shield name on `_` and dropping trailing segments. `lily58_left` produces the candidates `lily58` and `lily58_left`; `xiao_sofle_dongle` produces `xiao_sofle` and `xiao`.
+- For every candidate `s` it looks for `config/<s>_<board>.conf` and `config/<s>.conf`. For the board it looks for `config/<board-dir>.conf` and `config/<board>.conf`.
+- Every candidate that exists is appended, so later matches override earlier ones.
+
+Consequences worth remembering:
+- `config/lily58.conf` **is** auto-included for `lily58_left` and `lily58_right` builds through the `lily58` candidate. It is not inert.
+- `config/sofle_choc_pro.conf` applies to `sofle_choc_pro_left` and `sofle_choc_pro_right` through the board-directory candidate.
+- A new shield whose name starts with an existing shield name inherits that shield's config. Name shields accordingly.
+- `config/lily58_left.conf` and `config/lily58_right.conf` are appended after `config/lily58.conf`, so they override it.
+
+Display settings belong in the display shield (for example `boards/shields/nice_view_disp/nice_view_disp.conf`), not in shared keyboard configs, so that display and display-less builds of the same keyboard can coexist.
 
 ### Canonical builds — `build.yaml`
 `build.yaml` is the authoritative build matrix used by CI. Key patterns:
@@ -33,12 +42,28 @@ ZMK's build infrastructure for user config repos auto-includes `.conf` files by 
 - **Debug build**: `cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y -DCONFIG_ZMK_USB=y`
 
 ### Local build examples
+
+The config repo contains `zephyr/module.yml` with `board_root: .`, so it must be passed as an extra Zephyr module. `ZMK_CONFIG` points at the `config/` subdirectory. Do not copy the repo into the west workspace root: its `zephyr/` directory collides with the Zephyr project checkout.
+
+Verified against the ZMK build image:
+
 ```bash
-west build -b sofle_choc_pro_left -- -DSHIELD=settings_reset
-west build -b nice_nano_v2 -- -DSHIELD='sofle_dongle dongle_display'
-west build -b sofle_choc_pro_left -- -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
-west build -t pristine   # clean build
+docker run --rm \
+  -v ~/zmk-workspace:/workspace \
+  -v ~/not_work/projects/zmk-config:/repo \
+  -w /workspace zmkfirmware/zmk-build-arm:stable \
+  bash -lc 'west build -s zmk/app -d build/xiao \
+    -b seeeduino_xiao_ble -- \
+    -DSHIELD=xiao_sofle_dongle \
+    -DZMK_CONFIG=/repo/config \
+    -DZMK_EXTRA_MODULES=/repo \
+    -DZephyr_DIR=/workspace/zephyr/share/zephyr-package/cmake'
 ```
+
+- `-DZMK_EXTRA_MODULES` is required for the custom boards and shields under `boards/`.
+- Mirror `snippet` and `cmake-args` from the `build.yaml` entry, otherwise the binary will not match CI.
+- Builds are reproducible: the Lily58 nice!view build and the Sofle Studio build both matched the 2026-07-26 firmware byte for byte.
+- `west update lvgl` fails because it is an imported project. Run a full `west update`.
 
 Build artifacts: `build/zephyr/zmk.uf2`
 
@@ -49,12 +74,16 @@ Build artifacts: `build/zephyr/zmk.uf2`
 ## Keymap Architecture
 
 ### Dongle keymaps are includes
-`config/sofle_dongle.keymap` and `config/lily58_dongle.keymap` are thin wrappers:
+`config/sofle_dongle.keymap` and `config/xiao_sofle_dongle.keymap` are thin wrappers:
 ```
-#include "sofle_choc_pro.keymap"    # sofle_dongle.keymap
-#include "lily58.keymap"            # lily58_dongle.keymap (presumed)
+#include "sofle_choc_pro.keymap"
 ```
 **When editing key bindings, edit the parent keymap** — the dongle inherits all layers and behaviors automatically.
+
+Keymap lookup uses the same candidate logic as config lookup, and `config/` is searched before the shield directory. For the `lily58_dongle` shield the candidate list is `lily58`, then `lily58_dongle`, so `config/lily58.keymap` is selected first and `config/lily58_dongle.keymap` is never used. It is kept only as documentation.
+
+### XIAO dongles (no display)
+`boards/shields/xiao_sofle_dongle` and `boards/shields/xiao_lily58_dongle` target the Seeed XIAO nRF52840 (`board: seeeduino_xiao_ble`). They are display-less and do not reference `pro_micro` nodes, unlike the nice!nano dongle shields. Keymaps live in `config/xiao_*_dongle.keymap` and include the parent keymap.
 
 ### ZMK Studio layout
 `config/sofle_choc_pro.json` defines the Studio graphical keymap layout. It must stay in sync with the physical matrix defined in the devicetree.
