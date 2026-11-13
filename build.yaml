@@ -62,3 +62,12 @@ include:
   - board: nice_nano_v2
     shield: lily58_right
     artifact-name: lily58_right_peripheral
+
+  # Seeed XIAO nRF52840 dongles, no display
+  - board: seeeduino_xiao_ble
+    shield: xiao_sofle_dongle
+  - board: seeeduino_xiao_ble
+    shield: xiao_lily58_dongle
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
+
