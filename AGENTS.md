@@ -124,14 +124,35 @@ Set `CONFIG_ZMK_DISPLAY_STATUS_SCREEN_BUILT_IN=y` in your `.conf` to use ZMK's b
 - Kconfig format: `CONFIG_FOO=y` / `# CONFIG_FOO is not set`
 - Group related settings with blank line separators
 
-## Battery HID (XIAO dongles)
+## State report HID (XIAO dongles)
 
-`boards/shields/xiao_dongle_battery/battery_hid.c` adds a second USB HID interface (`HID_1`) to the XIAO dongles and publishes the peripheral battery levels. It is gated by `CONFIG_ZMK_SPLIT_BATTERY_HID_REPORT` and requires `CONFIG_USB_HID_DEVICE_COUNT=2`.
+`boards/shields/xiao_dongle_battery/battery_hid.c` adds a second USB HID interface (`HID_1`) to the XIAO dongles and publishes split keyboard state. It is gated by `CONFIG_ZMK_SPLIT_BATTERY_HID_REPORT` and requires `CONFIG_USB_HID_DEVICE_COUNT=2`.
 
-- Report format: `[report id 0x01, left %, right %]`, `0xFF` = unknown.
-- Sent every 5 seconds and whenever a `zmk_peripheral_battery_state_changed` event arrives. The periodic send is required because the extension needs an initial report and the shared levels only change occasionally.
+Report ID `0x01`, 27 bytes:
+
+| offset | content |
+|---|---|
+| 0 | report id 0x01 |
+| 1 | left battery % (`0xFF` unknown) |
+| 2 | right battery % (`0xFF` unknown) |
+| 3 | HID modifier mask |
+| 4 | highest active layer index |
+| 5-8 | active layer bitmask, uint32 LE |
+| 9 | output transport, 1 USB, 2 BLE |
+| 10 | WPM |
+| 11-26 | highest layer name, UTF-8, NUL padded |
+
+- Event driven: layer, modifier, keycode and peripheral battery events reschedule one coalescing work item that sends a single report. A 5 second keepalive gives the host an initial value and acts as a fallback.
+- `send_report` must not block: it uses `k_sem_take(..., K_NO_WAIT)` and retries after 5 ms on `-EBUSY` or `-ENODEV`.
+- `CONFIG_USB_COMPOSITE_DEVICE=y` is required. Without it the second HID interface enumerates but its endpoint is never configured, so every write returns `-EAGAIN`.
+- `CONFIG_HID_INTERRUPT_EP_MPS=32` is required. The default 16 cannot carry a 27-byte report, and oversized reports fail silently.
+- `CONFIG_ZMK_WPM=y` provides byte 10.
 - Init priority 91, before ZMK's USB init (94), because Zephyr requires HID devices to be registered before `usb_enable()`.
-- Host side: `scripts/99-zmk-split-battery.rules` plus the `zmk-split-battery` GNOME extension.
+- Host side: `scripts/99-zmk-split-battery.rules` plus the patched GNOME extension in `host/zmk-split-battery/` (install with its `install.sh`).
+
+## Sofle Choc Pro LEDs
+
+The Sofle halves have 30 WS2812 LEDs each on a switchable power rail. LEDs are not used: RGB underglow and `ZMK_EXT_POWER` are off in the board defconfigs, and a GPIO hog in each board `.dts` holds the rail's control pin low. ZMK's ext-power driver would otherwise switch the rail on at every boot, and the idle LEDs drained about 10 % battery per day.
 
 ## Testing
 No automated tests. Testing requires flashing firmware to hardware.

@@ -128,9 +128,9 @@ Shield-specific configs:
 
 ## Battery Monitoring (Linux/GNOME)
 
-The XIAO dongles expose the left and right half battery levels over a second USB HID interface, because the stock keyboard HID interface only carries key reports. BLE-based tools cannot reach the halves through a USB dongle.
+The XIAO dongles expose split keyboard state over a second USB HID interface, because the stock keyboard HID interface only carries key reports. BLE-based tools cannot reach the halves through a USB dongle.
 
-A report is sent every 5 seconds and on every battery event: `[0x01, left %, right %]`, where `0xFF` means unknown.
+Each 27-byte report carries both battery levels, held modifiers, the active layer (index, bitmask and name), the output transport and WPM. Reports are sent on every change, plus a keepalive every 5 seconds. The full layout is in `AGENTS.md`.
 
 Host setup, once:
 
@@ -138,10 +138,12 @@ Host setup, once:
 sudo cp scripts/99-zmk-split-battery.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules
 sudo udevadm trigger --subsystem-match=hidraw
-gnome-extensions enable zmk-split-battery@bogamie.github.io
+./host/zmk-split-battery/install.sh
 ```
 
-The indicator comes from [zmk-split-battery-tray](https://github.com/bogamie/zmk-split-battery-tray). Verify the dongle with `grep HID_ID /sys/class/hidraw/hidraw*/device/uevent`; it should show `0003:1D50:615E`.
+On Wayland the extension loads after the next logout and login.
+
+The indicator is a patched copy of [zmk-split-battery-tray](https://github.com/bogamie/zmk-split-battery-tray) in `host/zmk-split-battery/`. The panel shows left|right battery, held modifiers and the active layer; the menu has the details. An update from extensions.gnome.org overwrites it, so rerun `install.sh` afterwards. Verify the dongle with `grep HID_ID /sys/class/hidraw/hidraw*/device/uevent`; it should show `0003:1D50:615E`.
 
 ## Display Widgets
 
