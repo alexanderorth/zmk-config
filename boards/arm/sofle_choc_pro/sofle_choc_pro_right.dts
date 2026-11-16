@@ -13,7 +13,6 @@
 
     chosen {
         zmk,battery = &fuelgauge;
-        zmk,underglow = &led_strip;
     };
 
     kscan0: kscan {
@@ -37,13 +36,6 @@
             ;
         wakeup-source;
     };
-
-    // Node name must match original "EXT_POWER" label to preserve user settings.
-    EXT_POWER {
-        compatible = "zmk,ext-power-generic";
-        control-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
-        init-delay-ms = <50>;
-    };
 };
 
 &default_transform {
@@ -52,6 +44,17 @@
 
 &right_encoder {
     status = "okay";
+};
+
+// LED power rail held off. To bring the LEDs back, replace this hog with
+// the zmk,ext-power-generic node (control-gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>)
+// and re-enable RGB underglow in the defconfig.
+&gpio0 {
+    led_power_off: led-power-off {
+        gpio-hog;
+        gpios = <7 GPIO_ACTIVE_HIGH>;
+        output-low;
+    };
 };
 
 &pinctrl {

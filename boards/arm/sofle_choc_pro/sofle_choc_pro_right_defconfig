@@ -35,13 +35,13 @@ CONFIG_PINCTRL=y
 CONFIG_EC11=y
 CONFIG_EC11_TRIGGER_GLOBAL_THREAD=y
 
-# Enable RGB underglow
-CONFIG_WS2812_STRIP=y
-CONFIG_ZMK_RGB_UNDERGLOW=y
-CONFIG_ZMK_RGB_UNDERGLOW_BRT_MAX=20
-CONFIG_ZMK_RGB_UNDERGLOW_HUE_START=200
-CONFIG_ZMK_RGB_UNDERGLOW_SAT_START=98
-CONFIG_ZMK_RGB_UNDERGLOW_ON_START=n
+# LEDs are not used. RGB underglow and the switchable LED power rail are
+# compiled out; the rail's control pin is held low by a GPIO hog in the
+# board devicetree. ZMK would otherwise switch the rail on at every boot,
+# and 30 idle WS2812 LEDs draw far more than the rest of the half.
+CONFIG_ZMK_RGB_UNDERGLOW=n
+CONFIG_WS2812_STRIP=n
+CONFIG_ZMK_EXT_POWER=n
 
 # Windows Battery Reporting Fix
 CONFIG_BT_GATT_ENFORCE_SUBSCRIPTION=n
