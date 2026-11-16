@@ -1,0 +1,78 @@
+/* Panel: one compact row at the normal panel font size.
+   89|93 ⌃⇧⌥❖ [layer]
+   Every slot has a fixed width so pressing a modifier or switching
+   layers never moves the other panel icons. */
+
+.split-battery-box {
+    spacing: 2px;
+}
+
+.split-battery-pct {
+    font-feature-settings: "tnum" 1;
+    min-width: 1.3em;
+}
+
+.split-battery-pct.low {
+    color: #f8e45c;
+}
+
+.split-battery-pct.critical {
+    color: #ff7b63;
+    font-weight: bold;
+}
+
+.split-battery-sep {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.split-battery-mods {
+    spacing: 0;
+    margin-left: 4px;
+}
+
+.split-battery-mod {
+    min-width: 1em;
+    text-align: center;
+    border-radius: 3px;
+    color: rgba(255, 255, 255, 0.28);
+}
+
+.split-battery-mod:active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+.split-battery-layer {
+    width: 16px;
+    margin-left: 3px;
+}
+
+.split-battery-layer-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.split-battery-layer-index {
+    font-size: 9pt;
+    font-weight: bold;
+    font-feature-settings: "tnum" 1;
+}
+
+/* Undo the dimming GNOME Shell applies to non-reactive (insensitive)
+   menu items, so our read-only rows render in the normal text color. */
+.split-battery-info-item,
+.split-battery-info-item:insensitive {
+    color: inherit;
+}
+
+/* Menu item: [icon] [prefix label] [percent]. Fixed prefix width so
+   "Left" and "Right" align across rows, putting the percent column at
+   the same x. */
+.split-battery-menu-icon {
+    icon-size: 16px;
+    padding-right: 8px;
+}
+
+.split-battery-menu-prefix {
+    min-width: 56px;
+}
