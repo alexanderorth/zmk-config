@@ -126,6 +126,23 @@ Shield-specific configs:
 └── zephyr/                    # Zephyr module manifest
 ```
 
+## Battery Monitoring (Linux/GNOME)
+
+The XIAO dongles expose the left and right half battery levels over a second USB HID interface, because the stock keyboard HID interface only carries key reports. BLE-based tools cannot reach the halves through a USB dongle.
+
+A report is sent every 5 seconds and on every battery event: `[0x01, left %, right %]`, where `0xFF` means unknown.
+
+Host setup, once:
+
+```bash
+sudo cp scripts/99-zmk-split-battery.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=hidraw
+gnome-extensions enable zmk-split-battery@bogamie.github.io
+```
+
+The indicator comes from [zmk-split-battery-tray](https://github.com/bogamie/zmk-split-battery-tray). Verify the dongle with `grep HID_ID /sys/class/hidraw/hidraw*/device/uevent`; it should show `0003:1D50:615E`.
+
 ## Display Widgets
 
 The custom display widgets are located in `boards/shields/nice_view_disp/widgets/`:

@@ -124,5 +124,14 @@ Set `CONFIG_ZMK_DISPLAY_STATUS_SCREEN_BUILT_IN=y` in your `.conf` to use ZMK's b
 - Kconfig format: `CONFIG_FOO=y` / `# CONFIG_FOO is not set`
 - Group related settings with blank line separators
 
+## Battery HID (XIAO dongles)
+
+`boards/shields/xiao_dongle_battery/battery_hid.c` adds a second USB HID interface (`HID_1`) to the XIAO dongles and publishes the peripheral battery levels. It is gated by `CONFIG_ZMK_SPLIT_BATTERY_HID_REPORT` and requires `CONFIG_USB_HID_DEVICE_COUNT=2`.
+
+- Report format: `[report id 0x01, left %, right %]`, `0xFF` = unknown.
+- Sent every 5 seconds and whenever a `zmk_peripheral_battery_state_changed` event arrives. The periodic send is required because the extension needs an initial report and the shared levels only change occasionally.
+- Init priority 91, before ZMK's USB init (94), because Zephyr requires HID devices to be registered before `usb_enable()`.
+- Host side: `scripts/99-zmk-split-battery.rules` plus the `zmk-split-battery` GNOME extension.
+
 ## Testing
 No automated tests. Testing requires flashing firmware to hardware.

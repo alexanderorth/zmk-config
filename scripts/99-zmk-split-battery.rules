@@ -1,0 +1,10 @@
+# Grant the logged-in user access to the dongle's hidraw nodes so the
+# zmk-split-battery GNOME extension can read the vendor battery report.
+# Covers all HID interfaces of the dongle; the extension picks the
+# vendor-defined one by inspecting its report descriptor.
+#
+# Install:
+#   sudo cp scripts/99-zmk-split-battery.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload-rules
+#   sudo udevadm trigger
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615e", MODE="0660", GROUP="plugdev", TAG+="uaccess"
